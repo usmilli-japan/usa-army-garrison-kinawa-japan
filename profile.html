@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>User Profile - US Army Garrison Okinawa Japan</title>
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Profile Page Specific Styles */
+        body {
+            background: linear-gradient(135deg, #1a3a6f 0%, #2a4f8f 50%, #1e3f5a 100%);
+        }
+
+        .background-container {
+            display: none;
+        }
+
+        .profile-page-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .profile-page-header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.2);
+            margin-bottom: 40px;
+            box-sizing: border-box;
+        }
+
+        .profile-page-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.4));
+        }
+
+        .profile-page-title {
+            text-align: center;
+            flex: 1;
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .profile-page-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .lang-toggle {
+            padding: 8px 14px;
+            border: 1.5px solid rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+            border-radius: 22px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+            transition: all 0.35s ease;
+            backdrop-filter: blur(15px);
+        }
+
+        .lang-toggle:hover {
+            background: rgba(255, 255, 255, 0.45);
+            border-color: white;
+        }
+
+        .lang-toggle.active {
+            background: rgba(188, 0, 45, 0.9);
+            border-color: white;
+        }
+
+        .profile-page-card {
+            background: linear-gradient(135deg, rgba(26, 58, 111, 0.95) 0%, rgba(42, 79, 143, 0.95) 50%, rgba(30, 63, 90, 0.95) 100%);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 215, 0, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .profile-page-picture {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid #FFD700;
+            object-fit: cover;
+            margin: 0 auto 30px;
+            display: block;
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+        }
+
+        .profile-field {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .profile-field-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .profile-field-value {
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .profile-field-value.gold {
+            color: #FFD700;
+            font-size: 18px;
+        }
+
+        .profile-page-actions-footer {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            width: 100%;
+            max-width: 600px;
+            margin-top: 30px;
+        }
+
+        .btn-back {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: white;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-logout {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #FF6B6B;
+            background: rgba(255, 107, 107, 0.2);
+            color: #FF6B6B;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            background: rgba(255, 107, 107, 0.35);
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.4);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .profile-page-container {
+                padding: 10px;
+            }
+
+            .profile-page-header {
+                padding: 15px 10px;
+                margin-bottom: 20px;
+            }
+
+            .profile-page-title {
+                font-size: 18px;
+            }
+
+            .profile-page-card {
+                padding: 25px;
+                border-radius: 15px;
+            }
+
+            .profile-page-picture {
+                width: 120px;
+                height: 120px;
+            }
+
+            .profile-field {
+                padding: 12px;
+                margin-bottom: 15px;
+            }
+
+            .profile-field-value {
+                font-size: 14px;
+            }
+
+            .profile-page-actions-footer {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .logout-modal {
+                width: calc(100% - 20px);
+                padding: 20px;
+            }
+
+            .logout-modal-title {
+                font-size: 20px;
+            }
+
+            .logout-modal-message {
+                font-size: 14px;
+                margin-bottom: 20px;
+            }
+
+            .logout-modal-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .profile-page-header {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+                padding: 12px 8px;
+            }
+
+            .profile-page-logo {
+                width: 56px;
+                height: 56px;
+            }
+
+            .profile-page-title {
+                order: 3;
+                flex: 0 0 100%;
+                font-size: 20px;
+                margin-top: 4px;
+            }
+
+            .profile-page-actions {
+                order: 2;
+            }
+
+            .lang-toggle {
+                padding: 7px 10px;
+                font-size: 11px;
+            }
+        }
+
+        @media (min-width: 481px) and (max-width: 1024px) {
+            .profile-page-container {
+                padding: 30px 20px;
+            }
+
+            .profile-page-card {
+                max-width: 650px;
+                padding: 35px;
+            }
+        }
+
+        @media (min-width: 1025px) {
+            .profile-page-container {
+                padding: 40px 20px;
+            }
+
+            .profile-page-card {
+                max-width: 700px;
+            }
+        }
+
+        /* Loading Bar Styles */
+        .loading-bar-container {
+            width: 100%;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(183, 230, 66, 0.62);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .loading-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, rgba(183, 230, 66, 0.5) 0%, rgba(214, 245, 95, 0.9) 50%, rgba(165, 209, 44, 0.6) 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 12px;
+            position: relative;
+            transition: width 0.03s linear;
+            box-shadow: 0 0 16px rgba(183, 230, 66, 0.55), inset 0 1px 3px rgba(255, 255, 255, 0.22);
+        }
+
+        .loading-bar-text {
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        /* Gradient animation for loading bar */
+        @keyframes barGradient {
+            0% {
+                background: linear-gradient(90deg, rgba(183, 230, 66, 0.5) 0%, rgba(214, 245, 95, 0.9) 50%, rgba(165, 209, 44, 0.6) 100%);
+            }
+            50% {
+                background: linear-gradient(90deg, rgba(196, 237, 79, 0.58) 0%, rgba(227, 250, 132, 0.94) 50%, rgba(196, 237, 79, 0.58) 100%);
+            }
+            100% {
+                background: linear-gradient(90deg, rgba(183, 230, 66, 0.5) 0%, rgba(214, 245, 95, 0.9) 50%, rgba(165, 209, 44, 0.6) 100%);
+            }
+        }
+
+        .loading-bar.animate {
+            animation: barGradient 2s ease-in-out infinite;
+        }
+
+        .celebration-sticker {
+            display: inline-block;
+            margin-left: 8px;
+            transform-origin: center;
+        }
+
+        .celebration-sticker.animate-once {
+            animation: celebrationPop 10s ease-out 1;
+        }
+
+        @keyframes celebrationPop {
+            0% {
+                transform: scale(0.2) rotate(-28deg);
+                opacity: 0;
+            }
+            45% {
+                transform: scale(1.35) rotate(10deg);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .urgent-note-banner {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 0 12px 0;
+            padding: 10px 12px;
+            border: 2px solid rgba(255, 82, 82, 0.95);
+            border-radius: 10px;
+            background: linear-gradient(90deg, rgba(255, 71, 71, 0.25) 0%, rgba(255, 170, 0, 0.22) 100%);
+            box-shadow: 0 0 0 1px rgba(255, 82, 82, 0.35), 0 0 18px rgba(255, 82, 82, 0.35);
+            animation: urgentPulse 1.5s ease-in-out infinite;
+        }
+
+        .urgent-note-pill {
+            background: rgba(255, 240, 180, 0.15);
+            border: 1px solid rgba(255, 240, 180, 0.6);
+            color: #FFF0B4;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.9px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .urgent-note-text {
+            color: #FFFFFF;
+            font-size: 13px;
+            font-weight: 900;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            line-height: 1.35;
+        }
+
+        @keyframes urgentPulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 1px rgba(255, 82, 82, 0.35), 0 0 18px rgba(255, 82, 82, 0.35);
+            }
+            50% {
+                transform: scale(1.01);
+                box-shadow: 0 0 0 2px rgba(255, 132, 0, 0.45), 0 0 24px rgba(255, 104, 104, 0.5);
+            }
+        }
+
+        /* Logout Confirmation Modal */
+        .logout-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .logout-modal-overlay.active {
+            display: flex;
+        }
+
+        .logout-modal {
+            background: linear-gradient(135deg, rgba(26, 58, 111, 0.95) 0%, rgba(42, 79, 143, 0.95) 100%);
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 380px;
+            width: 90%;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 215, 0, 0.2);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            text-align: center;
+            animation: slideUp 0.3s ease;
+        }
+
+        .logout-modal-title {
+            color: #FFD700;
+            font-size: 22px;
+            font-weight: 700;
+            margin: 0 0 15px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .logout-modal-message {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+            margin: 0 0 30px 0;
+            line-height: 1.5;
+        }
+
+        .logout-modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .logout-modal-btn {
+            padding: 12px 24px;
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            flex: 1;
+            max-width: 150px;
+        }
+
+        .logout-btn-yes {
+            background: linear-gradient(135deg, rgba(255, 100, 100, 0.3) 0%, rgba(255, 150, 150, 0.2) 100%);
+            color: #FF6B6B;
+            border-color: #FF6B6B;
+        }
+
+        .logout-btn-yes:hover {
+            background: linear-gradient(135deg, rgba(255, 100, 100, 0.45) 0%, rgba(255, 150, 150, 0.35) 100%);
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .logout-btn-no {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.3) 0%, rgba(255, 215, 0, 0.15) 100%);
+            color: #FFD700;
+            border-color: #FFD700;
+        }
+
+        .logout-btn-no:hover {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.4) 0%, rgba(255, 215, 0, 0.25) 100%);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Upgrade Progress Bar Styles */
+        .upgrade-bar-container {
+            width: 100%;
+            height: 50px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(46, 204, 113, 0.6);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Ensure all three bar containers use the same green border as the first */
+        #bar2, #bar3 {
+            border-color: rgba(46, 204, 113, 0.6) !important;
+        }
+
+        .upgrade-bar {
+            height: 100%;
+            width: 0%;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 12px;
+            position: relative;
+            transition: width 0.04s linear;
+            box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.15);
+        }
+
+        .upgrade-bar-filled {
+            width: 0%;
+            background: linear-gradient(90deg, rgba(46, 204, 113, 0.6) 0%, rgba(46, 204, 113, 0.95) 50%, rgba(39, 174, 96, 0.7) 100%);
+            box-shadow: 0 0 15px rgba(46, 204, 113, 0.6), inset 0 1px 3px rgba(255, 255, 255, 0.2);
+            animation: barGlow 2s ease-in-out infinite;
+        }
+
+        .upgrade-bar-empty {
+            width: 0% !important;
+            background: transparent;
+            border: none;
+        }
+
+        @keyframes barGlow {
+            0%, 100% {
+                box-shadow: 0 0 15px rgba(46, 204, 113, 0.6), inset 0 1px 3px rgba(255, 255, 255, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 25px rgba(46, 204, 113, 0.9), inset 0 1px 3px rgba(255, 255, 255, 0.3);
+            }
+        }
+
+        /* Blinking animation for 0% bars */
+        @keyframes blink {
+            0%, 100% {
+                opacity: 1;
+                color: #e74c3c;
+            }
+            50% {
+                opacity: 0.3;
+                color: #e74c3c;
+            }
+        }
+
+        .blink-text {
+            animation: blink 0.6s ease-in-out infinite;
+        }
+
+        /* Remove blinking after 10 seconds */
+        .blink-text.stop-blink {
+            animation: none;
+            opacity: 1;
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-page-container">
+        <!-- Header with Logo and Language Toggle -->
+        <div class="profile-page-header">
+            <img src="assets/images-removebg-preview.png" alt="Logo" class="profile-page-logo">
+            <h1 class="profile-page-title" data-ja="プロフィール" data-en="Profile">プロフィール</h1>
+            <div class="profile-page-actions">
+                <button class="lang-toggle active" data-lang="ja">日本語</button>
+                <button class="lang-toggle" data-lang="en">English</button>
+            </div>
+        </div>
+
+        <!-- Profile Card -->
+        <div class="profile-page-card">
+            <img src="assets/profile-photo.jpg" alt="Profile Photo" class="profile-page-picture" onerror="this.src='assets/images-removebg-preview.png'">
+
+            <div class="profile-field">
+                <label class="profile-field-label" data-ja="名前:" data-en="Name:">名前:</label>
+                <p class="profile-field-value" data-ja="池田 浩一" data-en="MR. KOICHI IKEDA">MR. KOICHI IKEDA</p>
+            </div>
+
+            <div class="profile-field">
+                <label class="profile-field-label" data-ja="メール:" data-en="Email:">メール:</label>
+                <p class="profile-field-value">k44685030@gmail.com</p>
+            </div>
+
+            <div class="profile-field">
+                <label class="profile-field-label" data-ja="ステータス:" data-en="Status:">ステータス:</label>
+                <p class="profile-field-value" data-ja="ログイン済み" data-en="Logged In">ログイン済み</p>
+            </div>
+
+            <div class="profile-field">
+                <label class="profile-field-label" data-ja="(リスク利益):" data-en="(RISK BENEFIT):">(リスク利益):</label>
+                <p class="profile-field-value gold" data-ja="24,563,000円" data-en="24,563,000 YEN">24,563,000 YEN</p>
+            </div>
+
+            <!-- Verification Details Section -->
+            <div id="depositProcedureSection" style="background: rgba(255, 215, 0, 0.1); border: 2px solid rgba(255, 215, 0, 0.3); border-radius: 12px; padding: 20px; margin-top: 30px;">
+                <h3 class="profile-details-title" data-ja="入金手続き詳細" data-en="DEPOSIT PROCEDURE DETAILS" style="color: #FFD700; margin-bottom: 10px; text-align: center;">DEPOSIT PROCEDURE DETAILS</h3>
+                
+                <p style="color: rgba(255, 255, 255, 0.95); margin: 0 0 20px 0; font-size: 14px; font-weight: 600; text-align: center;" data-ja="限定 3/3 ティア 3 アップグレード進行中" data-en="LIMITED 3/3 TIER 3 UPGRADE IN PROGRESS">LIMITED 3/3 TIER 3 UPGRADE IN PROGRESS</p>
+
+                <!-- Progress Bars Container -->
+                <div style="display: flex; gap: 15px; margin-bottom: 20px; align-items: center;">
+                    <!-- 100% Bar (Green - Filled) -->
+                    <div style="flex: 1; text-align: center;">
+                        <div class="upgrade-bar-container" id="bar1">
+                            <div class="upgrade-bar upgrade-bar-filled" id="barFill1" style="width: 0%;"></div>
+                        </div>
+                        <p id="barPercentage1" style="color: #2ecc71; font-weight: 700; font-size: 18px; margin-top: 8px;">0%</p>
+                    </div>
+
+                    <!-- 0% Bar (Red - Empty with Blinking) -->
+                    <div style="flex: 1; text-align: center;">
+                        <div class="upgrade-bar-container" id="bar2">
+                            <div class="upgrade-bar upgrade-bar-filled" id="barFill2" style="width: 0%;"></div>
+                        </div>
+                        <p id="barPercentage2" class="bar-percentage" style="color: #2ecc71; font-weight: 700; font-size: 18px; margin-top: 8px;">0%</p>
+                    </div>
+
+                    <!-- 0% Bar (Red - Empty with Blinking) -->
+                    <div style="flex: 1; text-align: center;">
+                        <div class="upgrade-bar-container" id="bar3">
+                            <div class="upgrade-bar upgrade-bar-filled" id="barFill3" style="width: 0%;"></div>
+                        </div>
+                        <p id="barPercentage3" class="bar-percentage" style="color: #2ecc71; font-weight: 700; font-size: 18px; margin-top: 8px;">0%</p>
+                    </div>
+                </div>
+
+                <!-- Contact Handler Text -->
+                <div style="margin-top: 20px; padding: 15px; background: rgba(255, 215, 0, 0.08); border-left: 3px solid #FFD700; border-radius: 8px;">
+                    <p style="color: rgba(255, 255, 255, 0.9); margin: 0; font-size: 14px; font-weight: 600; text-align: center;" data-ja="アカウントハンドラーに連絡してアップグレード手続きを完了してください。" data-en="PLEASE CONTACT THE ACCOUNT HANDLER TO COMPLETE THE REMAINING UPGRADE PROCEDURE.">PLEASE CONTACT THE ACCOUNT HANDLER TO COMPLETE THE REMAINING UPGRADE PROCEDURE.</p>
+                </div>
+
+                <!-- Contact Button -->
+                <a href="https://line.me/ti/p/LXrw-MFkJx" target="_blank" style="display: block; width: 100%; padding: 12px 20px; background: linear-gradient(135deg, rgba(255, 215, 0, 0.3) 0%, rgba(255, 215, 0, 0.15) 100%); border: 2px solid #FFD700; color: #FFD700; border-radius: 8px; text-align: center; font-size: 14px; font-weight: 700; cursor: pointer; text-decoration: none; margin-top: 15px; transition: all 0.3s ease;" data-ja="連絡先" data-en="Contact" onmouseover="this.style.background='linear-gradient(135deg, rgba(255, 215, 0, 0.4) 0%, rgba(255, 215, 0, 0.25) 100%)'; this.style.boxShadow='0 0 20px rgba(255, 215, 0, 0.5)';" onmouseout="this.style.background='linear-gradient(135deg, rgba(255, 215, 0, 0.3) 0%, rgba(255, 215, 0, 0.15) 100%)'; this.style.boxShadow='none';">Contact</a>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="profile-page-actions-footer">
+            <button class="btn-logout" id="logoutBtn" data-ja="ログアウト" data-en="Logout">ログアウト</button>
+        </div>
+
+        <!-- Logout Confirmation Modal -->
+        <div class="logout-modal-overlay" id="logoutModalOverlay">
+            <div class="logout-modal" id="logoutModal">
+                <h2 class="logout-modal-title" data-ja="ログアウト確認" data-en="Logout Confirmation">ログアウト確認</h2>
+                <p class="logout-modal-message" data-ja="ログアウトしますか？" data-en="Are you sure you want to log out?">ログアウトしますか？</p>
+                <div class="logout-modal-buttons">
+                    <button class="logout-modal-btn logout-btn-yes" id="logoutYesBtn" data-ja="はい" data-en="Yes">はい</button>
+                    <button class="logout-modal-btn logout-btn-no" id="logoutNoBtn" data-ja="いいえ" data-en="No">いいえ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Profile Page Specific Script
+        document.addEventListener('DOMContentLoaded', function() {
+            const langToggles = document.querySelectorAll('.lang-toggle');
+            const logoutBtn = document.getElementById('logoutBtn');
+
+            // Force default language to Japanese on each page load
+            switchLanguage('ja');
+            
+            // Scroll deposit section out of view initially so observer can be triggered on user scroll
+            setTimeout(() => {
+                const depositSection = document.getElementById('depositProcedureSection');
+                if (depositSection) {
+                    const profileCard = document.querySelector('.profile-page-card');
+                    if (profileCard) {
+                        // Scroll to hide the deposit section
+                        window.scrollBy(0, -500);
+                    }
+                }
+            }, 100);
+
+            // Language toggle
+            langToggles.forEach(button => {
+                button.addEventListener('click', function() {
+                    const lang = this.getAttribute('data-lang');
+                    switchLanguage(lang);
+                    langToggles.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Logout Confirmation Modal
+            const logoutModalOverlay = document.getElementById('logoutModalOverlay');
+            const logoutYesBtn = document.getElementById('logoutYesBtn');
+            const logoutNoBtn = document.getElementById('logoutNoBtn');
+
+            // Logout button - show confirmation modal
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (logoutModalOverlay) {
+                        logoutModalOverlay.classList.add('active');
+                    }
+                });
+            }
+
+            // Logout Yes button
+            if (logoutYesBtn) {
+                logoutYesBtn.addEventListener('click', function() {
+                    localStorage.removeItem('userLoggedIn');
+                    localStorage.removeItem('userProfile');
+                    localStorage.removeItem('profileDisplayed');
+                    localStorage.removeItem('lastActivityTime');
+                    window.location.href = 'index.html';
+                });
+            }
+
+            // Logout No button
+            if (logoutNoBtn) {
+                logoutNoBtn.addEventListener('click', function() {
+                    if (logoutModalOverlay) {
+                        logoutModalOverlay.classList.remove('active');
+                    }
+                });
+            }
+
+            // Close modal when clicking outside
+            if (logoutModalOverlay) {
+                logoutModalOverlay.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.classList.remove('active');
+                    }
+                });
+            }
+
+            // Idle Time Tracking (30 seconds)
+            let idleTimer = null;
+            const IDLE_TIMEOUT = 30000; // 30 seconds
+
+            function resetIdleTimer() {
+                clearTimeout(idleTimer);
+                localStorage.setItem('lastActivityTime', Date.now());
+
+                idleTimer = setTimeout(function() {
+                    // Auto logout after 30 seconds of inactivity
+                    const isLoggedIn = localStorage.getItem('userLoggedIn') === 'true';
+                    if (isLoggedIn) {
+                        localStorage.removeItem('userLoggedIn');
+                        localStorage.removeItem('userProfile');
+                        localStorage.removeItem('profileDisplayed');
+                        localStorage.removeItem('lastActivityTime');
+                        alert(currentLanguage === 'ja' ? 'セッションタイムアウト: 30秒間操作がなかったためログアウトしました。' : 'Session Timeout: You have been logged out due to inactivity.');
+                        window.location.href = 'index.html';
+                    }
+                }, IDLE_TIMEOUT);
+            }
+
+            // Track user activity
+            const activityEvents = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart', 'click'];
+            activityEvents.forEach(event => {
+                document.addEventListener(event, resetIdleTimer, true);
+            });
+
+            // Start idle timer on page load
+            resetIdleTimer();
+
+            // Loading Bar Scroll Animation
+            const loadingBar = document.getElementById('loadingBar');
+            const loadingBarText = document.getElementById('loadingBarText');
+            const loadingBarContainer = document.getElementById('loadingBarContainer');
+            const verificationCompletionNotice = document.getElementById('verificationCompletionNotice');
+            const completionSticker = document.getElementById('completionSticker');
+            let hasAnimated = false;
+            let hasCelebrationAnimated = false;
+
+            function animateLoadingBar() {
+                if (hasAnimated) return;
+
+                hasAnimated = true;
+                loadingBar.classList.add('animate');
+
+                let currentWidth = 0;
+                const targetWidth = 100;
+                const duration = 3000; // 3 seconds
+                const steps = 100;
+                const stepDuration = duration / steps;
+
+                const interval = setInterval(() => {
+                    if (currentWidth < targetWidth) {
+                        currentWidth += targetWidth / steps;
+                        loadingBar.style.width = currentWidth + '%';
+                        loadingBarText.textContent = Math.round(currentWidth) + '%';
+                    } else {
+                        currentWidth = targetWidth;
+                        loadingBar.style.width = targetWidth + '%';
+                        loadingBarText.textContent = '100%';
+                        clearInterval(interval);
+                    }
+                }, stepDuration);
+            }
+
+            function animateCelebrationSticker() {
+                if (hasCelebrationAnimated || !completionSticker) return;
+                hasCelebrationAnimated = true;
+                completionSticker.classList.remove('animate-once');
+                void completionSticker.offsetWidth;
+                completionSticker.classList.add('animate-once');
+            }
+
+            // Intersection Observer to trigger animation when scrolled into view
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+
+                    if (entry.target === loadingBarContainer && !hasAnimated) {
+                        animateLoadingBar();
+                        observer.unobserve(entry.target);
+                    }
+
+                    if (entry.target === verificationCompletionNotice && !hasCelebrationAnimated) {
+                        animateCelebrationSticker();
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            if (loadingBarContainer) {
+                observer.observe(loadingBarContainer);
+            }
+
+            if (verificationCompletionNotice) {
+                observer.observe(verificationCompletionNotice);
+            }
+
+            // Deposit Procedure Section Animation
+            const depositProcedureSection = document.getElementById('depositProcedureSection');
+            let depositSectionAnimated = false;
+
+            // Delay the observer setup to prevent immediate triggering on page load
+            setTimeout(() => {
+                const depositObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting && !depositSectionAnimated) {
+                            depositSectionAnimated = true;
+                            
+                            // Animate 100% bar filling from 0% to 100%
+                            const barFill1 = document.getElementById('barFill1');
+                            const barPercentage1 = document.getElementById('barPercentage1');
+                            if (barFill1) {
+                                console.log('Starting bar animation...');
+                                let currentWidth = 0;
+                                const targetWidth = 100;
+                                const duration = 2500;
+                                const steps = 50;
+                                const stepDuration = duration / steps;
+                                const barFill2 = document.getElementById('barFill2');
+                                const barPercentage2 = document.getElementById('barPercentage2');
+
+                                const fillInterval = setInterval(() => {
+                                    if (currentWidth < targetWidth) {
+                                        currentWidth += targetWidth / steps;
+                                        const displayWidth = Math.min(Math.round(currentWidth), targetWidth);
+                                        // Bar 1 and 2 animate to 100%
+                                        barFill1.style.width = displayWidth + '%';
+                                        if (barPercentage1) {
+                                            barPercentage1.textContent = displayWidth + '%';
+                                        }
+                                        if (barFill2) {
+                                            barFill2.style.width = displayWidth + '%';
+                                        }
+                                        if (barPercentage2) {
+                                            barPercentage2.textContent = displayWidth + '%';
+                                        }
+
+                                        // Bar 3 should animate to 75% while keeping the same timing
+                                        const bar3Target = 75;
+                                        const bar3Value = Math.min(Math.round(displayWidth * (bar3Target / 100)), bar3Target);
+                                        const barFill3 = document.getElementById('barFill3');
+                                        const barPercentage3 = document.getElementById('barPercentage3');
+                                        if (barFill3) {
+                                            barFill3.style.width = bar3Value + '%';
+                                        }
+                                        if (barPercentage3) {
+                                            barPercentage3.textContent = bar3Value + '%';
+                                        }
+                                    } else {
+                                        // Finalize to targets
+                                        barFill1.style.width = '100%';
+                                        if (barPercentage1) {
+                                            barPercentage1.textContent = '100%';
+                                        }
+                                        if (barFill2) {
+                                            barFill2.style.width = '100%';
+                                        }
+                                        if (barPercentage2) {
+                                            barPercentage2.textContent = '100%';
+                                        }
+
+                                        const barFill3 = document.getElementById('barFill3');
+                                        const barPercentage3 = document.getElementById('barPercentage3');
+                                        if (barFill3) {
+                                            barFill3.style.width = '75%';
+                                        }
+                                        if (barPercentage3) {
+                                            barPercentage3.textContent = '75%';
+                                        }
+
+                                        clearInterval(fillInterval);
+                                    }
+                                }, stepDuration);
+                            }
+
+                            // Start blinking for the remaining 0% bar only
+                            const barPercentages = document.querySelectorAll('.blink-text');
+                            barPercentages.forEach(percentage => {
+                                percentage.classList.add('blink-text');
+                            });
+
+                            // Stop blinking after 10 seconds
+                            setTimeout(() => {
+                                const allPercentages = document.querySelectorAll('.blink-text');
+                                allPercentages.forEach(percentage => {
+                                    percentage.classList.remove('blink-text');
+                                    percentage.classList.add('stop-blink');
+                                });
+                            }, 10000);
+
+                            depositObserver.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.3 });
+
+                if (depositProcedureSection) {
+                    depositObserver.observe(depositProcedureSection);
+                }
+            }, 500);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Login - US Army Garrison Okinawa Japan</title>
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Background with animated Japan flag -->
+    <div class="background-container">
+        <div class="japan-flag-animated">
+            <img src="assets/japan-flag.svg" alt="Japan Flag" class="flag-image">
+        </div>
+        <div class="background-blur"></div>
+    </div>
+
+    <!-- Login Page Container -->
+    <div class="login-page-container">
+        <!-- Language Switcher -->
+        <div class="language-switcher">
+            <button class="lang-btn active" data-lang="ja">日本語</button>
+            <button class="lang-btn" data-lang="en">English</button>
+        </div>
+
+        <!-- Logo -->
+        <div class="login-page-logo">
+            <img src="assets/images-removebg-preview.png" alt="US Army Garrison Okinawa Japan Logo" class="logo">
+        </div>
+
+        <!-- Login Form Card -->
+        <div class="login-page-card">
+            <h1 class="login-page-title" data-ja="ログイン" data-en="Login">ログイン</h1>
+            <form class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label class="form-label" data-ja="メール:" data-en="Email:">メール:</label>
+                    <input type="email" class="form-input" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" data-ja="パスワード:" data-en="Password:">パスワード:</label>
+                    <input type="password" class="form-input" id="loginPassword" required>
+                </div>
+                <button type="submit" class="submit-btn" data-ja="ログイン" data-en="Login">ログイン</button>
+                <p class="login-error" id="loginError"></p>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Login page specific script
+        document.addEventListener('DOMContentLoaded', function() {
+            const langButtons = document.querySelectorAll('.lang-btn');
+            const loginForm = document.getElementById('loginForm');
+            const loginError = document.getElementById('loginError');
+
+            // Force default language to Japanese on each page load
+            switchLanguage('ja');
+
+            // Button click handlers
+            langButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const lang = this.getAttribute('data-lang');
+                    switchLanguage(lang);
+                });
+            });
+
+            // Valid credentials
+            const validEmail = 'k44685030@gmail.com';
+            const validPassword = '4t0hfp1kA';
+
+            // Handle form submission
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const email = document.getElementById('loginEmail').value.trim();
+                const password = document.getElementById('loginPassword').value;
+
+                // Validate credentials
+                if (email === validEmail && password === validPassword) {
+                    // Successful login
+                    loginError.classList.remove('show');
+                    localStorage.setItem('userLoggedIn', 'true');
+                    // Redirect to profile page directly
+                    window.location.href = 'profile.html';
+                } else {
+                    // Failed login
+                    loginError.classList.add('show');
+                    loginError.textContent = currentLanguage === 'ja' 
+                        ? 'メールまたはパスワードが正しくありません' 
+                        : 'Invalid email or password';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
